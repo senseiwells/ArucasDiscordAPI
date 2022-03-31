@@ -185,7 +185,7 @@ public class DiscordBotWrapper implements IArucasWrappedClass, EventListener {
 	 * Example: <code>bot.getChannel("12345678901234567890123456789012");</code>
 	 */
 	@ArucasFunction
-	private WrapperClassValue getChannel(Context context, StringValue channelId) throws CodeError {
+	public WrapperClassValue getChannel(Context context, StringValue channelId) throws CodeError {
 		MessageChannel messageChannel = this.jda.getChannelById(MessageChannel.class, channelId.value);
 		if (messageChannel == null) {
 			throw new RuntimeException("Channel with id '%s' couldn't be found".formatted(channelId.value));
@@ -202,7 +202,7 @@ public class DiscordBotWrapper implements IArucasWrappedClass, EventListener {
 	 * Example: <code>bot.getServer("12345678901234567890123456789012");</code>
 	 */
 	@ArucasFunction
-	private WrapperClassValue getServer(Context context, StringValue serverId) throws CodeError {
+	public WrapperClassValue getServer(Context context, StringValue serverId) throws CodeError {
 		Guild guild = this.jda.getGuildById(serverId.value);
 		if (guild == null) {
 			throw new RuntimeException("Server with id '%s' couldn't be found".formatted(serverId.value));
