@@ -1,9 +1,6 @@
 package me.senseiwells.arucas.discord;
 
-import me.senseiwells.arucas.api.wrappers.ArucasClass;
-import me.senseiwells.arucas.api.wrappers.ArucasConstructor;
-import me.senseiwells.arucas.api.wrappers.ArucasFunction;
-import me.senseiwells.arucas.api.wrappers.IArucasWrappedClass;
+import me.senseiwells.arucas.api.wrappers.*;
 import me.senseiwells.arucas.throwables.CodeError;
 import me.senseiwells.arucas.utils.Context;
 import me.senseiwells.arucas.utils.FunctionContext;
@@ -11,6 +8,7 @@ import me.senseiwells.arucas.values.MapValue;
 import me.senseiwells.arucas.values.NullValue;
 import me.senseiwells.arucas.values.StringValue;
 import me.senseiwells.arucas.values.Value;
+import me.senseiwells.arucas.values.classes.WrapperClassDefinition;
 import me.senseiwells.arucas.values.classes.WrapperClassValue;
 import me.senseiwells.arucas.values.functions.FunctionValue;
 import net.dv8tion.jda.api.JDA;
@@ -38,6 +36,9 @@ import java.util.Map;
  */
 @ArucasClass(name = "DiscordBot")
 public class DiscordBotWrapper implements IArucasWrappedClass, EventListener {
+	@ArucasDefinition
+	public static WrapperClassDefinition DEFINITION;
+
 	private Map<String, List<FunctionContext>> commandMap;
 	private Map<String, List<FunctionContext>> eventMap;
 	private JDA jda;
@@ -50,10 +51,7 @@ public class DiscordBotWrapper implements IArucasWrappedClass, EventListener {
 	 */
 	@ArucasConstructor
 	public void construct(Context context, StringValue token) throws LoginException {
-		this.commandMap = new HashMap<>();
-		this.eventMap = new HashMap<>();
-		this.jda = JDABuilder.createDefault(token.value).addEventListeners(this).build();
-		context.getThreadHandler().addShutdownEvent(() -> this.jda.shutdown());
+		this.construct(JDABuilder.createDefault(token.value).addEventListeners(this).build(), context);
 	}
 
 	/**
@@ -210,6 +208,23 @@ public class DiscordBotWrapper implements IArucasWrappedClass, EventListener {
 		return DiscordServerWrapper.newDiscordServer(guild, context);
 	}
 
+	private void construct(JDA jda, Context context) {
+		this.commandMap = new HashMap<>();
+		this.eventMap = new HashMap<>();
+		this.jda = jda;
+
+		if (!jda.getEventManager().getRegisteredListeners().contains(this)) {
+			jda.addEventListener(this);
+			context.getThreadHandler().addShutdownEvent(jda::shutdownNow);
+		}
+	}
+
+	public static WrapperClassValue newDiscordBot(JDA jda, Context context) throws CodeError {
+		DiscordBotWrapper botWrapper = new DiscordBotWrapper();
+		botWrapper.construct(jda, context);
+		return DEFINITION.createNewDefinition(botWrapper, context, List.of());
+	}
+
 	@Override
 	public void onEvent(@NotNull GenericEvent event) {
 		if (event instanceof GenericCommandInteractionEvent commandEvent) {
@@ -243,5 +258,10 @@ public class DiscordBotWrapper implements IArucasWrappedClass, EventListener {
 				functionContext.functionValue().call(branchContext, parameters);
 			});
 		});
+	}
+
+	@Override
+	public JDA asJavaValue() {
+		return this.jda;
 	}
 }

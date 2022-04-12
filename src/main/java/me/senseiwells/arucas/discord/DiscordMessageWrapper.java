@@ -234,4 +234,9 @@ public class DiscordMessageWrapper implements IArucasWrappedClass {
 		channelWrapper.message = message;
 		return DEFINITION.createNewDefinition(channelWrapper, context, List.of());
 	}
+
+	@Override
+	public Message asJavaValue() {
+		return this.message;
+	}
 }

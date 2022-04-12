@@ -104,4 +104,9 @@ public class DiscordAttachmentWrapper implements IArucasWrappedClass {
 		attachmentWrapper.attachment = attachment;
 		return DEFINITION.createNewDefinition(attachmentWrapper, context, List.of());
 	}
+
+	@Override
+	public Message.Attachment asJavaValue() {
+		return this.attachment;
+	}
 }

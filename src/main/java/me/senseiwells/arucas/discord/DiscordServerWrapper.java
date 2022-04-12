@@ -131,4 +131,9 @@ public class DiscordServerWrapper implements IArucasWrappedClass {
 		channelWrapper.guild = guild;
 		return DEFINITION.createNewDefinition(channelWrapper, context, List.of());
 	}
+
+	@Override
+	public Guild asJavaValue() {
+		return this.guild;
+	}
 }

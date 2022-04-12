@@ -194,4 +194,9 @@ public class DiscordEventWrapper implements IArucasWrappedClass {
 		eventWrapper.event = event;
 		return DEFINITION.createNewDefinition(eventWrapper, context, List.of());
 	}
+
+	@Override
+	public GenericEvent asJavaValue() {
+		return this.event;
+	}
 }

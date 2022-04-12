@@ -7,20 +7,12 @@ import java.util.concurrent.CountDownLatch;
 
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
-		Context context = new ContextBuilder()
+		ContextBuilder builder = new ContextBuilder()
 			.setDisplayName("System.in")
-			.addDefault()
-			.addWrappers(
-				DiscordAttachmentWrapper::new,
-				DiscordBotWrapper::new,
-				DiscordEventWrapper::new,
-				DiscordMessageWrapper::new,
-				DiscordUserWrapper::new,
-				DiscordChannelWrapper::new,
-				DiscordServerWrapper::new
-			)
-			.build();
-		
+			.addDefault();
+		DiscordAPI.addDiscordAPI(builder);
+		Context context = builder.build();
+
 		while (true) {
 			Scanner scanner = new Scanner(System.in);
 			String line = scanner.nextLine();

@@ -78,4 +78,9 @@ public class DiscordUserWrapper implements IArucasWrappedClass {
 		userWrapper.user = user;
 		return DEFINITION.createNewDefinition(userWrapper, context, List.of());
 	}
+
+	@Override
+	public User asJavaValue() {
+		return this.user;
+	}
 }
