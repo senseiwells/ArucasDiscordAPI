@@ -42,7 +42,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 
-    implementation 'com.github.senseiwells:Arucas:fb72dc37c708b541643379f4476e364dc2fb509a'
+    implementation 'com.github.senseiwells:Arucas:895a98ccc5fe517cd8f0b192a0c060c413d88f43'
 }
 
 tasks.withType(JavaCompile).configureEach {

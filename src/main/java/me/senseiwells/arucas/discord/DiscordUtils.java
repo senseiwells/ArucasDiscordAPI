@@ -2,7 +2,6 @@ package me.senseiwells.arucas.discord;
 
 import me.senseiwells.arucas.throwables.CodeError;
 import me.senseiwells.arucas.utils.Context;
-import me.senseiwells.arucas.utils.FunctionContext;
 import me.senseiwells.arucas.utils.impl.ArucasMap;
 import me.senseiwells.arucas.values.*;
 import me.senseiwells.arucas.values.functions.FunctionValue;
@@ -215,4 +214,6 @@ public class DiscordUtils {
 			default -> StringValue.of(mapping.getAsString());
 		};
 	}
+
+	public record FunctionContext(Context context, FunctionValue functionValue) { }
 }

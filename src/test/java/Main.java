@@ -1,28 +1,44 @@
 import me.senseiwells.arucas.api.ContextBuilder;
 import me.senseiwells.arucas.discord.*;
+import me.senseiwells.arucas.throwables.CodeError;
 import me.senseiwells.arucas.utils.Context;
+import me.senseiwells.arucas.utils.ExceptionUtils;
 
+import java.io.IOException;
 import java.util.Scanner;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.*;
 
 public class Main {
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException, IOException, ExecutionException, CodeError {
 		ContextBuilder builder = new ContextBuilder()
 			.setDisplayName("System.in")
-			.addDefault();
+			.addDefault()
+			.generateArucasFiles();
 		DiscordAPI.addDiscordAPI(builder);
 		Context context = builder.build();
 
-		while (true) {
-			Scanner scanner = new Scanner(System.in);
+		if (args.length != 0 && args[0].equals("-noformat")) {
+			context.getOutput().setFormatting("", "", "");
+		}
+		context.getOutput().println("Welcome to Arucas Interpreter");
+
+		Scanner scanner = new Scanner(System.in);
+		boolean running = true;
+		while (running) {
+			System.out.print("\n>> ");
+
 			String line = scanner.nextLine();
-			if (line.trim().equals("")) {
-				continue;
+			switch (line.trim()) {
+				case "" -> {
+					continue;
+				}
+				case "quit", "exit" -> {
+					running = false;
+					continue;
+				}
 			}
-			
-			CountDownLatch latch = new CountDownLatch(1);
-			context.getThreadHandler().runOnThread(context, "System.in", line, latch);
-			latch.await();
+
+			context.getThreadHandler().runOnMainThreadFuture(context, "System.in", line).get();
 		}
 	}
 }

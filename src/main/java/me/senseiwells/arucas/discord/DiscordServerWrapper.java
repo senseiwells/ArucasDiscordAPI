@@ -19,6 +19,7 @@ import java.util.List;
  * Fully Documented.
  * @author senseiwells
  */
+@SuppressWarnings("unused")
 @ArucasClass(name = "DiscordServer")
 public class DiscordServerWrapper implements IArucasWrappedClass {
 	@ArucasDefinition

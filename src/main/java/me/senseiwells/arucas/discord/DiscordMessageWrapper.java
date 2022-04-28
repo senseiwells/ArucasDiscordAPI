@@ -20,6 +20,7 @@ import java.util.List;
  * Fully Documented.
  * @author senseiwells
  */
+@SuppressWarnings("unused")
 @ArucasClass(name = "DiscordMessage")
 public class DiscordMessageWrapper implements IArucasWrappedClass {
 	@ArucasDefinition

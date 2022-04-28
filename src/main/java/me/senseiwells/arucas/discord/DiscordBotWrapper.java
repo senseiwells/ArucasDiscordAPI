@@ -1,9 +1,9 @@
 package me.senseiwells.arucas.discord;
 
 import me.senseiwells.arucas.api.wrappers.*;
+import me.senseiwells.arucas.discord.DiscordUtils.FunctionContext;
 import me.senseiwells.arucas.throwables.CodeError;
 import me.senseiwells.arucas.utils.Context;
-import me.senseiwells.arucas.utils.FunctionContext;
 import me.senseiwells.arucas.values.MapValue;
 import me.senseiwells.arucas.values.NullValue;
 import me.senseiwells.arucas.values.StringValue;
@@ -34,6 +34,7 @@ import java.util.Map;
  * Fully Documented.
  * @author senseiwells
  */
+@SuppressWarnings("unused")
 @ArucasClass(name = "DiscordBot")
 public class DiscordBotWrapper implements IArucasWrappedClass, EventListener {
 	@ArucasDefinition

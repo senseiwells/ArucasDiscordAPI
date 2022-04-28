@@ -21,6 +21,7 @@ import java.util.List;
  * Fully Documented.
  * @author senseiwells
  */
+@SuppressWarnings("unused")
 @ArucasClass(name = "DiscordAttachment")
 public class DiscordAttachmentWrapper implements IArucasWrappedClass {
 	@ArucasDefinition

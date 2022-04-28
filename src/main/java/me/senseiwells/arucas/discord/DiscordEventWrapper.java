@@ -32,6 +32,7 @@ import java.util.List;
  * Fully Documented.
  * @author senseiwells
  */
+@SuppressWarnings("unused")
 @ArucasClass(name = "DiscordEvent")
 public class DiscordEventWrapper implements IArucasWrappedClass {
 	@ArucasDefinition
