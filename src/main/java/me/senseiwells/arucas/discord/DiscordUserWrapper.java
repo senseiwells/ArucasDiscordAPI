@@ -1,5 +1,7 @@
 package me.senseiwells.arucas.discord;
 
+import me.senseiwells.arucas.api.docs.ClassDoc;
+import me.senseiwells.arucas.api.docs.FunctionDoc;
 import me.senseiwells.arucas.api.wrappers.ArucasClass;
 import me.senseiwells.arucas.api.wrappers.ArucasDefinition;
 import me.senseiwells.arucas.api.wrappers.ArucasFunction;
@@ -13,12 +15,14 @@ import net.dv8tion.jda.api.entities.User;
 
 import java.util.List;
 
-/**
- * DiscordUser class wrapper for Arucas. <br>
- * Fully Documented.
- * @author senseiwells
- */
+import static me.senseiwells.arucas.discord.DiscordAPI.DISCORD_USER;
+import static me.senseiwells.arucas.utils.ValueTypes.STRING;
+
 @SuppressWarnings("unused")
+@ClassDoc(
+	name = DISCORD_USER,
+	desc = "This class is used to interact with Discord users."
+)
 @ArucasClass(name = "DiscordUser")
 public class DiscordUserWrapper implements IArucasWrappedClass {
 	@ArucasDefinition
@@ -26,45 +30,45 @@ public class DiscordUserWrapper implements IArucasWrappedClass {
 
 	private User user;
 
-	/**
-	 * Name: <code>&lt;DiscordUser>.getName()</code> <br>
-	 * Description: This gets the name of the user <br>
-	 * Returns - String: the name of the user <br>
-	 * Example: <code>user.getName();</code>
-	 */
+	@FunctionDoc(
+		name = "getName",
+		desc = "This gets the name of the user",
+		returns = {STRING, "The name of the user"},
+		example = "user.getName();"
+	)
 	@ArucasFunction
 	public StringValue getName(Context context) {
 		return StringValue.of(this.user.getName());
 	}
 
-	/**
-	 * Name: <code>&lt;DiscordUser>.getTag()</code> <br>
-	 * Description: This gets the tag of the user, the numbers after the # <br>
-	 * Returns - String: the tag of the user <br>
-	 * Example: <code>user.getTag();</code>
-	 */
+	@FunctionDoc(
+		name = "getTag",
+		desc = "This gets the tag of the user, the numbers after the #",
+		returns = {STRING, "The tag of the user"},
+		example = "user.getTag();"
+	)
 	@ArucasFunction
 	public StringValue getTag(Context context) {
 		return StringValue.of(this.user.getDiscriminator());
 	}
 
-	/**
-	 * Name: <code>&lt;DiscordUser>.getNameAndTag()</code> <br>
-	 * Description: This gets the name and tag of the user <br>
-	 * Returns - String: the name and tag of the user <br>
-	 * Example: <code>user.getNameAndTag();</code>
-	 */
+	@FunctionDoc(
+		name = "getNameAndTag",
+		desc = "This gets the name and tag of the user",
+		returns = {STRING, "The name and tag of the user"},
+		example = "user.getNameAndTag();"
+	)
 	@ArucasFunction
 	public StringValue getNameAndTag(Context context) {
 		return StringValue.of(this.user.getAsTag());
 	}
 
-	/**
-	 * Name: <code>&lt;DiscordUser>.getId()</code> <br>
-	 * Description: This gets the id of the user <br>
-	 * Returns - String: the id of the user <br>
-	 * Example: <code>user.getId();</code>
-	 */
+	@FunctionDoc(
+		name = "getId",
+		desc = "This gets the id of the user",
+		returns = {STRING, "The id of the user"},
+		example = "user.getId();"
+	)
 	@ArucasFunction
 	public StringValue getId(Context context) {
 		return DiscordUtils.getId(this.user);

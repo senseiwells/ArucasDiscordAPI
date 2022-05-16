@@ -2,7 +2,6 @@ package me.senseiwells.arucas.discord;
 
 import me.senseiwells.arucas.throwables.CodeError;
 import me.senseiwells.arucas.utils.Context;
-import me.senseiwells.arucas.utils.ExceptionUtils;
 import me.senseiwells.arucas.utils.impl.ArucasMap;
 import me.senseiwells.arucas.values.*;
 import me.senseiwells.arucas.values.functions.FunctionValue;
@@ -17,10 +16,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.restaction.RoleAction;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public class DiscordUtils {
 	private static final StringValue
@@ -30,6 +26,8 @@ public class DiscordUtils {
 		COMMAND = StringValue.of("command"),
 		NAME = StringValue.of("name"),
 		DESCRIPTION = StringValue.of("description");
+
+	private static Map<String, Permission> cachedPermissions;
 
 	public static StringValue getId(ISnowflake snowflake) {
 		return StringValue.of(snowflake.getId());
@@ -122,8 +120,16 @@ public class DiscordUtils {
 			return;
 		}
 
+		if (cachedPermissions == null) {
+			cachedPermissions = new HashMap<>();
+
+			for (Permission permission : Permission.values()) {
+				cachedPermissions.put(permission.getName(), permission);
+			}
+		}
+
 		for (Value permission : listValue.value) {
-			Permission listedPermission = ExceptionUtils.catchAsNull(() -> Permission.valueOf(permission.getAsString(context)));
+			Permission listedPermission = cachedPermissions.get(permission.getAsString(context));
 			if (listedPermission != null) {
 				roleAction = roleAction.setPermissions(listedPermission);
 			}

@@ -1,6 +1,7 @@
 package me.senseiwells.arucas.discord;
 
 import me.senseiwells.arucas.api.docs.ClassDoc;
+import me.senseiwells.arucas.api.docs.FunctionDoc;
 import me.senseiwells.arucas.api.wrappers.ArucasClass;
 import me.senseiwells.arucas.api.wrappers.ArucasDefinition;
 import me.senseiwells.arucas.api.wrappers.ArucasFunction;
@@ -28,12 +29,14 @@ import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
 
 import java.util.List;
 
-/**
- * DiscordEvent class wrapper for Arucas. <br>
- * Fully Documented.
- * @author senseiwells
- */
+import static me.senseiwells.arucas.discord.DiscordAPI.*;
+import static me.senseiwells.arucas.utils.ValueTypes.STRING;
+
 @SuppressWarnings("unused")
+@ClassDoc(
+	name = DISCORD_EVENT,
+	desc = "This class is an event wrapper that you can use to access event parameters."
+)
 @ArucasClass(name = "DiscordEvent")
 public class DiscordEventWrapper implements IArucasWrappedClass {
 	@ArucasDefinition
@@ -41,93 +44,105 @@ public class DiscordEventWrapper implements IArucasWrappedClass {
 
 	private GenericEvent event;
 
-	/**
-	 * Name: <code>&lt;DiscordEvent>.getEventName()</code> <br>
-	 * Description: This gets the name of the event <br>
-	 * Returns - String: the name of the event <br>
-	 * Example: <code>event.getEventName();</code>
-	 */
+	@FunctionDoc(
+		name = "getEventName",
+		desc = "This gets the name of the event",
+		returns = {STRING, "the name of the event"},
+		example = "event.getEventName();"
+	)
 	@ArucasFunction
 	public StringValue getEventName(Context context) {
 		return StringValue.of(this.event.getClass().getSimpleName());
 	}
 
-	/**
-	 * Name: <code>&lt;DiscordEvent>.getMessage()</code> <br>
-	 * Description: This gets the message that is related to the event <br>
-	 * Returns - DiscordMessage: the message <br>
-	 * Throws - Error: "... has no message" if the event does not have a message <br>
-	 * Example: <code>event.getMessage();</code>
-	 */
+	@FunctionDoc(
+		name = "getMessage",
+		desc = "This gets the message that is related to the event",
+		returns = {DISCORD_MESSAGE, "the message"},
+		throwMsgs = "... has no message",
+		example = "event.getMessage();"
+	)
 	@ArucasFunction
 	public WrapperClassValue getMessage(Context context) throws CodeError {
 		return DiscordMessageWrapper.newDiscordMessage(this.getMessage(), context);
 	}
 
-	/**
-	 * Name: <code>&lt;DiscordEvent>.getUser()</code> <br>
-	 * Description: This gets the user that is related to the event <br>
-	 * Returns - DiscordUser: the user <br>
-	 * Throws - Error: "... has no user" if the event does not have a user <br>
-	 * Example: <code>event.getUser();</code>
-	 */
+	@FunctionDoc(
+		name = "getUser",
+		desc = "This gets the user that is related to the event",
+		returns = {DISCORD_USER, "the user"},
+		throwMsgs = "... has no user",
+		example = "event.getUser();"
+	)
 	@ArucasFunction
 	public WrapperClassValue getUser(Context context) throws CodeError {
 		return DiscordUserWrapper.newDiscordUser(this.getUser(), context);
 	}
 
-	/**
-	 * Name: <code>&lt;DiscordEvent>.getChannel()</code> <br>
-	 * Description: This gets the channel that is related to the event <br>
-	 * Returns - DiscordChannel: the channel <br>
-	 * Throws - Error: "... has no channel" if the event does not have a channel <br>
-	 * Example: <code>event.getChannel();</code>
-	 */
+	@FunctionDoc(
+		name = "getChannel",
+		desc = "This gets the channel that is related to the event",
+		returns = {DISCORD_CHANNEL, "the channel"},
+		throwMsgs = "... has no channel",
+		example = "event.getChannel();"
+	)
 	@ArucasFunction
 	public WrapperClassValue getChannel(Context context) throws CodeError {
 		return DiscordChannelWrapper.newDiscordChannel(this.getChannel(), context);
 	}
 
-	/**
-	 * Name: <code>&lt;DiscordEvent>.getServer()</code> <br>
-	 * Description: This gets the server that is related to the event <br>
-	 * Returns - DiscordServer: the server <br>
-	 * Throws - Error: "... has no server" if the event does not have a server <br>
-	 * Example: <code>event.getServer();</code>
-	 */
+	@FunctionDoc(
+		name = "getServer",
+		desc = "This gets the server that is related to the event",
+		returns = {DISCORD_SERVER, "the server"},
+		throwMsgs = "... has no server",
+		example = "event.getServer();"
+	)
 	@ArucasFunction
 	public WrapperClassValue getServer(Context context) throws CodeError {
 		return DiscordServerWrapper.newDiscordServer(this.getServer(), context);
 	}
 
-	/**
-	 * Name: <code>&lt;DiscordEvent>.reply(message)</code> <br>
-	 * Description: This replies to the event with the given message <br>
-	 * Parameter - String: the message <br>
-	 * Example: <code>event.reply("Reply!");</code>
-	 */
+	@FunctionDoc(
+		name = "reply",
+		desc = "This replies to the event with the given message",
+		params = {STRING, "the message"},
+		example = "event.reply('Reply!');"
+	)
 	@ArucasFunction
 	public void reply(Context context, StringValue message) {
 		this.getReplyCallback().reply(message.value).complete();
 	}
 
-	/**
-	 * Name: <code>&lt;DiscordEvent>.replyWithEmbed(embedMap)</code> <br>
-	 * Description: This replies to the event with the given embed map <br>
-	 * Parameter - Map: the embed map <br>
-	 * Example: <code>event.replyWithEmbed({"title": "EMBED!", "description": ["Wow", "Nice"], "colour": 0xFFFFFF});</code>
-	 */
+	@FunctionDoc(
+		name = "replyWithEmbed",
+		desc = {
+			"This replies to the event with the given embed map",
+			"In the embed map, you can use the following keys:",
+			"'title' as String, ''description' as String or List of String, 'colour'/'color' as Number",
+			"'fields' as Map with keys: ('name' as String, 'value' as String, 'inline' as Boolean)",
+			"and 'image' as String that is an url"
+		},
+		params = {MAP, "embedMap", "the embed map"},
+		example = """
+		event.replyWithEmbed({
+		    'title': 'EMBED!',
+		    'description': ['Wow', 'Nice'],
+		    'colour': 0xFFFFFF
+		});
+		"""
+	)
 	@ArucasFunction
 	public void replyWithEmbed(Context context, MapValue mapValue) throws CodeError {
 		this.getReplyCallback().replyEmbeds(DiscordUtils.parseMapAsEmbed(context, mapValue)).complete();
 	}
 
-	/**
-	 * Name: <code>&lt;DiscordEvent>.replyWithFile(file)</code> <br>
-	 * Description: This replies to the event with the given file <br>
-	 * Parameter - File: the file <br>
-	 * Example: <code>event.replyWithFile(new File("/path/to/file.txt"));</code>
-	 */
+	@FunctionDoc(
+		name = "replyWithFile",
+		desc = "This replies to the event with the given file",
+		params = {FILE, "file", "the file"},
+		example = "event.replyWithFile(new File('/path/to/file.txt'));"
+	)
 	@ArucasFunction
 	public void replyWithFile(Context context, FileValue fileValue) {
 		this.getReplyCallback().replyFile(fileValue.value).complete();

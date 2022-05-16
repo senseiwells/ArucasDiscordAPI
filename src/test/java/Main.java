@@ -1,18 +1,16 @@
 import me.senseiwells.arucas.api.ContextBuilder;
-import me.senseiwells.arucas.discord.*;
-import me.senseiwells.arucas.throwables.CodeError;
+import me.senseiwells.arucas.discord.DiscordAPI;
 import me.senseiwells.arucas.utils.ArgumentParser;
 import me.senseiwells.arucas.utils.Context;
-import me.senseiwells.arucas.utils.ExceptionUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Scanner;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
 
 public class Main {
-	public static void main(String[] args) throws InterruptedException, IOException, ExecutionException, CodeError {
+	public static void main(String[] args) throws InterruptedException, IOException, ExecutionException {
 		ContextBuilder builder = new ContextBuilder()
 			.setDisplayName("System.in")
 			.addDefault();

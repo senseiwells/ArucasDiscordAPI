@@ -18,8 +18,7 @@ import net.dv8tion.jda.api.entities.Message;
 
 import java.util.List;
 
-import static me.senseiwells.arucas.discord.DiscordAPI.DISCORD_ATTACHMENT;
-import static me.senseiwells.arucas.utils.ValueTypes.*;
+import static me.senseiwells.arucas.discord.DiscordAPI.*;
 
 @SuppressWarnings("unused")
 @ClassDoc(
