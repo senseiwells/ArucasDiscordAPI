@@ -1,5 +1,6 @@
 package me.senseiwells.arucas.discord;
 
+import me.senseiwells.arucas.api.docs.ClassDoc;
 import me.senseiwells.arucas.api.wrappers.ArucasClass;
 import me.senseiwells.arucas.api.wrappers.ArucasDefinition;
 import me.senseiwells.arucas.api.wrappers.ArucasFunction;

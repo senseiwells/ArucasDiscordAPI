@@ -2,6 +2,7 @@ package me.senseiwells.arucas.discord;
 
 import me.senseiwells.arucas.throwables.CodeError;
 import me.senseiwells.arucas.utils.Context;
+import me.senseiwells.arucas.utils.ExceptionUtils;
 import me.senseiwells.arucas.utils.impl.ArucasMap;
 import me.senseiwells.arucas.values.*;
 import me.senseiwells.arucas.values.functions.FunctionValue;
@@ -17,8 +18,8 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.restaction.RoleAction;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class DiscordUtils {
@@ -30,8 +31,6 @@ public class DiscordUtils {
 		NAME = StringValue.of("name"),
 		DESCRIPTION = StringValue.of("description");
 
-	private static Map<String, Permission> permissionMap;
-
 	public static StringValue getId(ISnowflake snowflake) {
 		return StringValue.of(snowflake.getId());
 	}
@@ -40,14 +39,14 @@ public class DiscordUtils {
 		EmbedBuilder embedBuilder = new EmbedBuilder();
 		ArucasMap map = mapValue.value;
 
-		Value<?> value = map.get(context, StringValue.of("title"));
+		Value value = map.get(context, StringValue.of("title"));
 		if (value != null) {
 			embedBuilder.setTitle(value.getAsString(context));
 		}
 
 		value = map.get(context, StringValue.of("description"));
 		if (value instanceof ListValue listValue) {
-			for (Value<?> descriptions : listValue.value) {
+			for (Value descriptions : listValue.value) {
 				embedBuilder.appendDescription(descriptions.getAsString(context));
 			}
 		}
@@ -69,16 +68,16 @@ public class DiscordUtils {
 				NAME = StringValue.of("name"),
 				VALUE = StringValue.of("value"),
 				INLINE = StringValue.of("inline");
-			for (Value<?> field : listValue.value) {
+			for (Value field : listValue.value) {
 				if (!(field instanceof MapValue)) {
 					continue;
 				}
-				ArucasMap fieldObj = (ArucasMap) field.value;
-				Value<?> nameValue = fieldObj.get(context, NAME);
+				ArucasMap fieldObj = (ArucasMap) field.getValue();
+				Value nameValue = fieldObj.get(context, NAME);
 				String name = nameValue == null ? null : nameValue.getAsString(context);
-				Value<?> valueValue = fieldObj.get(context, VALUE);
+				Value valueValue = fieldObj.get(context, VALUE);
 				String fieldValue = valueValue == null ? null : valueValue.getAsString(context);
-				Value<?> inlineValue = fieldObj.get(context, INLINE);
+				Value inlineValue = fieldObj.get(context, INLINE);
 				boolean inline = inlineValue instanceof BooleanValue booleanValue ? booleanValue.value : false;
 				embedBuilder.addField(name, fieldValue, inline);
 			}
@@ -94,7 +93,7 @@ public class DiscordUtils {
 	public static void parseMapAsRole(Context context, RoleAction roleAction, MapValue mapValue) throws CodeError {
 		ArucasMap map = mapValue.value;
 
-		Value<?> value = map.get(context, StringValue.of("name"));
+		Value value = map.get(context, StringValue.of("name"));
 		if (value != null) {
 			roleAction = roleAction.setName(value.getAsString(context));
 		}
@@ -123,16 +122,8 @@ public class DiscordUtils {
 			return;
 		}
 
-		if (permissionMap == null) {
-			permissionMap = new HashMap<>();
-
-			for (Permission permission : Permission.values()) {
-				permissionMap.put(permission.getName(), permission);
-			}
-		}
-
-		for (Value<?> permission : listValue.value) {
-			Permission listedPermission = permissionMap.get(permission.getAsString(context));
+		for (Value permission : listValue.value) {
+			Permission listedPermission = ExceptionUtils.catchAsNull(() -> Permission.valueOf(permission.getAsString(context)));
 			if (listedPermission != null) {
 				roleAction = roleAction.setPermissions(listedPermission);
 			}
@@ -141,8 +132,8 @@ public class DiscordUtils {
 	}
 
 	public static SlashCommandData parseMapAsCommand(Context context, Map<String, List<FunctionContext>> commandMap, ArucasMap arucasMap) throws CodeError {
-		Value<?> name = arucasMap.get(context, NAME);
-		Value<?> description = arucasMap.get(context, DESCRIPTION);
+		Value name = arucasMap.get(context, NAME);
+		Value description = arucasMap.get(context, DESCRIPTION);
 		if (name == null || description == null) {
 			throw new RuntimeException("Command must have name and a description");
 		}
@@ -150,9 +141,9 @@ public class DiscordUtils {
 		SlashCommandData slashCommandData = Commands.slash(commandName, description.getAsString(context));
 		List<FunctionContext> functions = new ArrayList<>();
 		commandMap.put(commandName, functions);
-		Value<?> command = arucasMap.get(context, COMMAND);
+		Value command = arucasMap.get(context, COMMAND);
 		functions.add(0, command instanceof FunctionValue functionValue ? new FunctionContext(context, functionValue) : null);
-		Value<?> nextOption = arucasMap.get(context, NEXT);
+		Value nextOption = arucasMap.get(context, NEXT);
 		if (nextOption instanceof MapValue mapValue) {
 			slashCommandData = commandOption(Commands.slash(name.getAsString(context), description.getAsString(context)), functions, context, mapValue.value, 1);
 		}
@@ -163,31 +154,31 @@ public class DiscordUtils {
 		if (depth > 25) {
 			throw new RuntimeException("Slash command went too deep");
 		}
-		Value<?> option = arucasMap.get(context, TYPE);
+		Value option = arucasMap.get(context, TYPE);
 		if (option == null) {
 			throw new RuntimeException("Command must include option type");
 		}
-		OptionType optionType = switch (option.getAsString(context)) {
-			case "String" -> OptionType.STRING;
-			case "Integer" -> OptionType.INTEGER;
-			case "Number" -> OptionType.NUMBER;
-			case "Boolean" -> OptionType.BOOLEAN;
-			case "User" -> OptionType.USER;
-			case "Channel" -> OptionType.CHANNEL;
-			case "Attachment" -> OptionType.ATTACHMENT;
+		OptionType optionType = switch (option.getAsString(context).toLowerCase(Locale.ROOT)) {
+			case "string" -> OptionType.STRING;
+			case "integer" -> OptionType.INTEGER;
+			case "number" -> OptionType.NUMBER;
+			case "boolean" -> OptionType.BOOLEAN;
+			case "user" -> OptionType.USER;
+			case "channel" -> OptionType.CHANNEL;
+			case "attachment" -> OptionType.ATTACHMENT;
 			default -> throw new RuntimeException("Invalid option");
 		};
-		Value<?> name = arucasMap.get(context, NAME);
-		Value<?> description = arucasMap.get(context, DESCRIPTION);
+		Value name = arucasMap.get(context, NAME);
+		Value description = arucasMap.get(context, DESCRIPTION);
 		if (name == null || description == null) {
 			throw new RuntimeException("Command must have name and a description");
 		}
-		Value<?> required = arucasMap.get(context, REQUIRED);
+		Value required = arucasMap.get(context, REQUIRED);
 		boolean req = required instanceof BooleanValue booleanValue && booleanValue.value;
 		slashCommandData = slashCommandData.addOption(optionType, name.getAsString(context), description.getAsString(context), req);
-		Value<?> command = arucasMap.get(context, COMMAND);
+		Value command = arucasMap.get(context, COMMAND);
 		commandList.add(depth, command instanceof FunctionValue functionValue ? new FunctionContext(context, functionValue) : null);
-		Value<?> nextOption = arucasMap.get(context, NEXT);
+		Value nextOption = arucasMap.get(context, NEXT);
 		if (nextOption instanceof MapValue mapValue) {
 			depth++;
 			slashCommandData = commandOption(slashCommandData, commandList, context, mapValue.value, depth);
@@ -195,8 +186,8 @@ public class DiscordUtils {
 		return slashCommandData;
 	}
 
-	public static List<Value<?>> getParameters(Context context, GenericCommandInteractionEvent commandEvent) throws CodeError {
-		List<Value<?>> parameters = new ArrayList<>();
+	public static List<Value> getParameters(Context context, GenericCommandInteractionEvent commandEvent) throws CodeError {
+		List<Value> parameters = new ArrayList<>();
 		parameters.add(DiscordEventWrapper.newDiscordEvent(commandEvent, context));
 		for (OptionMapping mapping : commandEvent.getOptions()) {
 			parameters.add(parseMapping(context, mapping));
@@ -204,7 +195,7 @@ public class DiscordUtils {
 		return parameters;
 	}
 
-	private static Value<?> parseMapping(Context context, OptionMapping mapping) throws CodeError {
+	private static Value parseMapping(Context context, OptionMapping mapping) throws CodeError {
 		return switch (mapping.getType()) {
 			case INTEGER, NUMBER -> NumberValue.of(mapping.getAsDouble());
 			case BOOLEAN -> BooleanValue.of(mapping.getAsBoolean());
@@ -215,5 +206,15 @@ public class DiscordUtils {
 		};
 	}
 
-	public record FunctionContext(Context context, FunctionValue functionValue) { }
+	public record FunctionContext(Context context, FunctionValue function) {
+		public FunctionContext(Context context, FunctionValue function) {
+			this.context = context.createBranch();
+			this.function = function;
+		}
+
+		@Override
+		public Context context() {
+			return this.context.createBranch();
+		}
+	}
 }

@@ -110,7 +110,7 @@ public class DiscordServerWrapper implements IArucasWrappedClass {
 	 * Example: <code>server.getUserFromId("12345678901234567890123456789012");</code>
 	 */
 	@ArucasFunction
-	public Value<?> getUserFromId(Context context, StringValue stringValue) throws CodeError {
+	public Value getUserFromId(Context context, StringValue stringValue) throws CodeError {
 		Member member = this.guild.retrieveMemberById(stringValue.value).complete();
 		return member == null ? NullValue.NULL : DiscordUserWrapper.newDiscordUser(member.getUser(), context);
 	}
