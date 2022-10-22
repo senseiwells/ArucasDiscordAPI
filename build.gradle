@@ -37,12 +37,12 @@ configurations {
 }
 
 dependencies {
-    packImplementation 'net.dv8tion:JDA:5.0.0-alpha.9'
+    packImplementation 'net.dv8tion:JDA:5.0.0-alpha.19'
     packImplementation 'ch.qos.logback:logback-classic:1.2.11'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 
-    compileOnly 'com.github.senseiwells:Arucas:v1.2.0'
+    compileOnly 'com.github.senseiwells:Arucas:0d2f92cb78d801e7250076715a512e5ad881648e:default'
 }
 
 tasks.withType(JavaCompile).configureEach {

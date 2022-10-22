@@ -1,15 +1,16 @@
 package me.senseiwells.arucas.discord;
 
-import me.senseiwells.arucas.api.ContextBuilder;
-import me.senseiwells.arucas.utils.ValueTypes;
+import me.senseiwells.arucas.api.ArucasAPI;
+import me.senseiwells.arucas.discord.definitions.*;
+import me.senseiwells.arucas.discord.impl.DiscordBot;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.GenericEvent;
 
-public class DiscordAPI extends ValueTypes {
+public class DiscordAPI {
 	public static final String
 		DISCORD_ATTACHMENT = "DiscordAttachment",
 		DISCORD_BOT = "DiscordBot",
@@ -19,23 +20,25 @@ public class DiscordAPI extends ValueTypes {
 		DISCORD_SERVER = "DiscordServer",
 		DISCORD_USER = "DiscordUser";
 
-	public static void addDiscordAPI(ContextBuilder builder) {
-		builder.addWrappers(
+	@SuppressWarnings({"unchecked", "unused"})
+	public static void addDiscordAPI(ArucasAPI.Builder builder) {
+		builder.addClassDefinitions(
 			"discordapi\\Discord",
-			DiscordAttachmentWrapper::new,
-			DiscordBotWrapper::new,
-			DiscordChannelWrapper::new,
-			DiscordEventWrapper::new,
-			DiscordMessageWrapper::new,
-			DiscordServerWrapper::new,
-			DiscordUserWrapper::new
+			DiscordAttachmentDef::new,
+			DiscordBotDef::new,
+			DiscordChannelDef::new,
+			DiscordEventDef::new,
+			DiscordMessageDef::new,
+			DiscordServerDef::new,
+			DiscordUserDef::new
 		);
-		builder.addConversion(Message.Attachment.class, DiscordAttachmentWrapper::newDiscordAttachment);
-		builder.addConversion(JDA.class, DiscordBotWrapper::newDiscordBot);
-		builder.addConversion(MessageChannel.class, DiscordChannelWrapper::newDiscordChannel);
-		builder.addConversion(GenericEvent.class, DiscordEventWrapper::newDiscordEvent);
-		builder.addConversion(Message.class, DiscordMessageWrapper::newDiscordMessage);
-		builder.addConversion(Guild.class, DiscordServerWrapper::newDiscordServer);
-		builder.addConversion(User.class, DiscordUserWrapper::newDiscordUser);
+		builder.addConversion(Message.Attachment.class, (a, i) -> i.create(DiscordAttachmentDef.class, a));
+		builder.addConversion(DiscordBot.class, (d, i) -> i.create(DiscordBotDef.class, d));
+		builder.addConversion(JDA.class, (j, i) -> i.create(DiscordBotDef.class, new DiscordBot(j, i)));
+		builder.addConversion(TextChannel.class, (t, i) -> i.create(DiscordChannelDef.class, t));
+		builder.addConversion(GenericEvent.class, (e, i) -> i.create(DiscordEventDef.class, e));
+		builder.addConversion(Message.class, (m, i) -> i.create(DiscordMessageDef.class, m));
+		builder.addConversion(Guild.class, (g, i) -> i.create(DiscordServerDef.class, g));
+		builder.addConversion(User.class, (u, i) -> i.create(DiscordUserDef.class, u));
 	}
 }
