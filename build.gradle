@@ -4,7 +4,9 @@ plugins {
 }
 
 group 'me.senseiwells'
-version '1.0.0'
+version '2.0.0'
+
+def projectVersion = version
 
 sourceCompatibility = JavaVersion.VERSION_16
 targetCompatibility = JavaVersion.VERSION_16
@@ -21,28 +23,14 @@ sourceSets {
         java.srcDirs 'src/main/java'
         resources.setSrcDirs(['src/main/resources'])
     }
-    test {
-        java.srcDirs 'src/test/java'
-        resources.setSrcDirs(['src/test/resources'])
-    }
-}
-
-configurations {
-    // implementations that should be included in the jar file
-    packImplementation {
-        transitive false
-    }
-
-    implementation.extendsFrom(packImplementation)
 }
 
 dependencies {
-    packImplementation 'net.dv8tion:JDA:5.0.0-alpha.19'
-    packImplementation 'ch.qos.logback:logback-classic:1.2.11'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    implementation 'net.dv8tion:JDA:5.0.0-alpha.19'
+    implementation 'com.github.senseiwells:Arucas:9b7f4f8eed'
 
-    compileOnly 'com.github.senseiwells:Arucas:0d2f92cb78d801e7250076715a512e5ad881648e:default'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -55,9 +43,6 @@ test {
 
 jar {
     from "LICENSE"
-    from {
-        configurations.packImplementation.collect { it.isDirectory() ? it : zipTree(it) }
-    }
     // No manifest since there's no main class
 }
 
@@ -66,7 +51,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'com.github.senseiwells'
             artifactId = 'ArucasDiscordAPI'
-            version = '1.0.0'
+            version = projectVersion
 
             from components.java
         }
