@@ -13,10 +13,7 @@ import me.senseiwells.arucas.core.Interpreter;
 import me.senseiwells.arucas.discord.DiscordUtils;
 import me.senseiwells.arucas.discord.impl.DiscordBot;
 import me.senseiwells.arucas.exceptions.RuntimeError;
-import me.senseiwells.arucas.utils.Arguments;
-import me.senseiwells.arucas.utils.ArucasFunction;
-import me.senseiwells.arucas.utils.ConstructorFunction;
-import me.senseiwells.arucas.utils.MemberFunction;
+import me.senseiwells.arucas.utils.*;
 import me.senseiwells.arucas.utils.impl.ArucasMap;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -31,7 +28,9 @@ import static me.senseiwells.arucas.utils.Util.Types.*;
 
 @ClassDoc(
 	name = DISCORD_BOT,
-	desc = "This class lets you create a Discord bot and interact with it."
+	desc = "This class lets you create a Discord bot and interact with it.",
+	importPath = "discordapi.Discord",
+	language = Util.Language.Java
 )
 public class DiscordBotDef extends CreatableDefinition<DiscordBot> {
 	public DiscordBotDef(Interpreter interpreter) {

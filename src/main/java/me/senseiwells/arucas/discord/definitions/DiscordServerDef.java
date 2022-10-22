@@ -9,6 +9,7 @@ import me.senseiwells.arucas.core.Interpreter;
 import me.senseiwells.arucas.discord.DiscordUtils;
 import me.senseiwells.arucas.utils.Arguments;
 import me.senseiwells.arucas.utils.MemberFunction;
+import me.senseiwells.arucas.utils.Util;
 import me.senseiwells.arucas.utils.impl.ArucasMap;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -24,7 +25,9 @@ import static me.senseiwells.arucas.utils.Util.Types.*;
 
 @ClassDoc(
 	name = DISCORD_SERVER,
-	desc = "This class allows you to interact with Discord servers."
+	desc = "This class allows you to interact with Discord servers.",
+	importPath = "discordapi.Discord",
+	language = Util.Language.Java
 )
 public class DiscordServerDef extends CreatableDefinition<Guild> {
 	public DiscordServerDef(Interpreter interpreter) {

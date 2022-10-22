@@ -7,6 +7,7 @@ import me.senseiwells.arucas.classes.CreatableDefinition;
 import me.senseiwells.arucas.core.Interpreter;
 import me.senseiwells.arucas.utils.Arguments;
 import me.senseiwells.arucas.utils.MemberFunction;
+import me.senseiwells.arucas.utils.Util;
 import net.dv8tion.jda.api.entities.Message;
 
 import java.io.File;
@@ -18,7 +19,9 @@ import static me.senseiwells.arucas.utils.Util.Types.*;
 
 @ClassDoc(
 	name = DISCORD_ATTACHMENT,
-	desc = "This class lets you download and manipulate discord attachments."
+	desc = "This class lets you download and manipulate discord attachments.",
+	importPath = "discordapi.Discord",
+	language = Util.Language.Java
 )
 public class DiscordAttachmentDef extends CreatableDefinition<Message.Attachment> {
 	public DiscordAttachmentDef(Interpreter interpreter) {

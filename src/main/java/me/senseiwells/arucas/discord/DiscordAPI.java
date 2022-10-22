@@ -23,7 +23,7 @@ public class DiscordAPI {
 	@SuppressWarnings({"unchecked", "unused"})
 	public static void addDiscordAPI(ArucasAPI.Builder builder) {
 		builder.addClassDefinitions(
-			"discordapi\\Discord",
+			"discordapi.Discord",
 			DiscordAttachmentDef::new,
 			DiscordBotDef::new,
 			DiscordChannelDef::new,

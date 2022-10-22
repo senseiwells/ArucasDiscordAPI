@@ -13,6 +13,7 @@ import me.senseiwells.arucas.discord.DiscordUtils;
 import me.senseiwells.arucas.utils.Arguments;
 import me.senseiwells.arucas.utils.LocatableTrace;
 import me.senseiwells.arucas.utils.MemberFunction;
+import me.senseiwells.arucas.utils.Util;
 import me.senseiwells.arucas.utils.impl.ArucasMap;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
@@ -31,7 +32,9 @@ import static me.senseiwells.arucas.utils.Util.Types.*;
 
 @ClassDoc(
 	name = DISCORD_MESSAGE,
-	desc = "This class allows you to interact with Discord messages."
+	desc = "This class allows you to interact with Discord messages.",
+	importPath = "discordapi.Discord",
+	language = Util.Language.Java
 )
 public class DiscordMessageDef extends CreatableDefinition<Message> {
 	public DiscordMessageDef(Interpreter interpreter) {

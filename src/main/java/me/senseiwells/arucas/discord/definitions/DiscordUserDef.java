@@ -7,6 +7,7 @@ import me.senseiwells.arucas.core.Interpreter;
 import me.senseiwells.arucas.discord.DiscordUtils;
 import me.senseiwells.arucas.utils.Arguments;
 import me.senseiwells.arucas.utils.MemberFunction;
+import me.senseiwells.arucas.utils.Util;
 import net.dv8tion.jda.api.entities.User;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +18,9 @@ import static me.senseiwells.arucas.utils.Util.Types.STRING;
 
 @ClassDoc(
 	name = DISCORD_USER,
-	desc = "This class is used to interact with Discord users."
+	desc = "This class is used to interact with Discord users.",
+	importPath = "discordapi.Discord",
+	language = Util.Language.Java
 )
 public class DiscordUserDef extends CreatableDefinition<User> {
 	public DiscordUserDef(Interpreter interpreter) {

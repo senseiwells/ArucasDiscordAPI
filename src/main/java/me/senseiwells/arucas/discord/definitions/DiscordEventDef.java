@@ -11,6 +11,7 @@ import me.senseiwells.arucas.discord.DiscordUtils;
 import me.senseiwells.arucas.exceptions.RuntimeError;
 import me.senseiwells.arucas.utils.Arguments;
 import me.senseiwells.arucas.utils.MemberFunction;
+import me.senseiwells.arucas.utils.Util;
 import me.senseiwells.arucas.utils.impl.ArucasMap;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
@@ -35,7 +36,9 @@ import static me.senseiwells.arucas.utils.Util.Types.*;
 
 @ClassDoc(
 	name = DISCORD_EVENT,
-	desc = "This class is an event wrapper that you can use to access event parameters."
+	desc = "This class is an event wrapper that you can use to access event parameters.",
+	importPath = "discordapi.Discord",
+	language = Util.Language.Java
 )
 public class DiscordEventDef extends CreatableDefinition<GenericEvent> {
 	public DiscordEventDef(Interpreter interpreter) {

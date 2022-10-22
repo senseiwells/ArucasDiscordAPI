@@ -12,6 +12,7 @@ import me.senseiwells.arucas.discord.DiscordUtils;
 import me.senseiwells.arucas.exceptions.RuntimeError;
 import me.senseiwells.arucas.utils.Arguments;
 import me.senseiwells.arucas.utils.MemberFunction;
+import me.senseiwells.arucas.utils.Util;
 import me.senseiwells.arucas.utils.impl.ArucasMap;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
@@ -26,7 +27,9 @@ import static me.senseiwells.arucas.utils.Util.Types.*;
 
 @ClassDoc(
 	name = DISCORD_CHANNEL,
-	desc = "This class allows you to get and send messages in the channel"
+	desc = "This class allows you to get and send messages in the channel",
+	importPath = "discordapi.Discord",
+	language = Util.Language.Java
 )
 public class DiscordChannelDef extends CreatableDefinition<MessageChannel> {
 	public DiscordChannelDef(Interpreter interpreter) {
