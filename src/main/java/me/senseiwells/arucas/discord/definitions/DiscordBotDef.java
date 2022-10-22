@@ -69,7 +69,7 @@ public class DiscordBotDef extends CreatableDefinition<DiscordBot> {
 	public Unit construct(Arguments arguments) {
 		ClassInstance instance = arguments.next();
 		String token = arguments.nextPrimitive(StringDef.class);
-		instance.setPrimitive(this, new DiscordBot(JDABuilder.createDefault(token).addEventListeners(this).build(), arguments.getInterpreter()));
+		instance.setPrimitive(this, new DiscordBot(JDABuilder.createDefault(token).build(), arguments.getInterpreter()));
 		return null;
 	}
 
