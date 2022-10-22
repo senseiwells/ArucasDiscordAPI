@@ -27,7 +27,7 @@ sourceSets {
 
 dependencies {
     implementation 'net.dv8tion:JDA:5.0.0-alpha.19'
-    implementation 'com.github.senseiwells:Arucas:9b7f4f8eed'
+    compileOnly 'com.github.senseiwells:Arucas:9b7f4f8eed'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
