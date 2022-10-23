@@ -1,5 +1,6 @@
 package me.senseiwells.arucas.discord.definitions;
 
+import kotlin.jvm.functions.Function0;
 import me.senseiwells.arucas.api.docs.ClassDoc;
 import me.senseiwells.arucas.api.docs.FunctionDoc;
 import me.senseiwells.arucas.builtin.BooleanDef;
@@ -10,6 +11,7 @@ import me.senseiwells.arucas.classes.ClassInstance;
 import me.senseiwells.arucas.classes.CreatableDefinition;
 import me.senseiwells.arucas.core.Interpreter;
 import me.senseiwells.arucas.discord.DiscordUtils;
+import me.senseiwells.arucas.exceptions.RuntimeError;
 import me.senseiwells.arucas.utils.Arguments;
 import me.senseiwells.arucas.utils.LocatableTrace;
 import me.senseiwells.arucas.utils.MemberFunction;
@@ -20,6 +22,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -145,11 +148,11 @@ public class DiscordMessageDef extends CreatableDefinition<Message> {
 	public Void addReaction(Arguments arguments) {
 		Message message = arguments.nextPrimitive(this);
 		String emojiId = arguments.nextPrimitive(StringDef.class);
-		Emoji emoji = message.getGuild().getEmojiById(emojiId);
+		Emoji emoji = RuntimeError.wrap(() -> message.getGuild().getEmojiById(emojiId));
 		if (emoji == null) {
 			throw new RuntimeException("'%s' is not a valid emoji id".formatted(emojiId));
 		}
-		message.addReaction(emoji).complete();
+		RuntimeError.wrap(() -> message.addReaction(emoji)).complete();
 		return null;
 	}
 
@@ -162,7 +165,7 @@ public class DiscordMessageDef extends CreatableDefinition<Message> {
 	public Void addReactionUnicode(Arguments arguments) {
 		Message message = arguments.nextPrimitive(this);
 		String unicode = arguments.nextPrimitive(StringDef.class);
-		message.addReaction(Emoji.fromUnicode(unicode)).complete();
+		RuntimeError.wrap(() -> message.addReaction(Emoji.fromUnicode(unicode))).complete();
 		return null;
 	}
 
@@ -173,7 +176,7 @@ public class DiscordMessageDef extends CreatableDefinition<Message> {
 	)
 	public Void removeAllReactions(Arguments arguments) {
 		Message message = arguments.nextPrimitive(this);
-		message.clearReactions().complete();
+		RuntimeError.wrap(() -> message.clearReactions()).complete();
 		return null;
 	}
 
@@ -184,7 +187,7 @@ public class DiscordMessageDef extends CreatableDefinition<Message> {
 	)
 	public Void delete(Arguments arguments) {
 		Message message = arguments.nextPrimitive(this);
-		message.delete().complete();
+		RuntimeError.wrap(message::delete).complete();
 		return null;
 	}
 
@@ -197,11 +200,7 @@ public class DiscordMessageDef extends CreatableDefinition<Message> {
 	public Void pin(Arguments arguments) {
 		Message message = arguments.nextPrimitive(this);
 		boolean shouldPin = arguments.nextPrimitive(BooleanDef.class);
-		if (shouldPin) {
-			message.pin().complete();
-			return null;
-		}
-		message.unpin().complete();
+		RuntimeError.wrap(shouldPin ? message::pin : message::unpin).complete();
 		return null;
 	}
 
@@ -237,7 +236,7 @@ public class DiscordMessageDef extends CreatableDefinition<Message> {
 	public ClassInstance reply(Arguments arguments) {
 		Message message = arguments.nextPrimitive(this);
 		String toSend = arguments.nextPrimitive(StringDef.class);
-		return this.create(message.reply(toSend).complete());
+		return this.create(RuntimeError.wrap(() -> message.reply(toSend)).complete());
 	}
 
 	@FunctionDoc(
@@ -262,7 +261,7 @@ public class DiscordMessageDef extends CreatableDefinition<Message> {
 	public ClassInstance replyWithEmbed(Arguments arguments) {
 		Message message = arguments.nextPrimitive(this);
 		ArucasMap embed = arguments.nextPrimitive(MapDef.class);
-		return this.create(message.replyEmbeds(DiscordUtils.parseMapAsEmbed(arguments.getInterpreter(), embed)).complete());
+		return this.create(RuntimeError.wrap(() -> message.replyEmbeds(DiscordUtils.parseMapAsEmbed(arguments.getInterpreter(), embed))).complete());
 	}
 
 	@FunctionDoc(
@@ -275,6 +274,6 @@ public class DiscordMessageDef extends CreatableDefinition<Message> {
 	public ClassInstance replyWithFile(Arguments arguments) {
 		Message message = arguments.nextPrimitive(this);
 		File file = arguments.nextPrimitive(FileDef.class);
-		return this.create(message.replyFiles(FileUpload.fromData(file)).complete());
+		return this.create(RuntimeError.wrap(() -> message.replyFiles(FileUpload.fromData(file))).complete());
 	}
 }

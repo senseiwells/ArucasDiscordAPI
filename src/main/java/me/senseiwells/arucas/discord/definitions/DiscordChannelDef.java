@@ -58,7 +58,7 @@ public class DiscordChannelDef extends CreatableDefinition<MessageChannel> {
 	public Message getMessageFromId(Arguments arguments) {
 		MessageChannel channel = arguments.nextPrimitive(this);
 		String messageId = arguments.nextPrimitive(StringDef.class);
-		Message message = channel.getHistory().getMessageById(messageId);
+		Message message = RuntimeError.wrap(() -> channel.getHistory().getMessageById(messageId));
 		if (message == null) {
 			throw new RuntimeError("Message with id " + messageId + " couldn't be found");
 		}
@@ -75,7 +75,7 @@ public class DiscordChannelDef extends CreatableDefinition<MessageChannel> {
 	public List<Message> getHistory(Arguments arguments) {
 		MessageChannel channel = arguments.nextPrimitive(this);
 		int amount = arguments.nextPrimitive(NumberDef.class).intValue();
-		return channel.getHistory().retrievePast(amount).complete();
+		return RuntimeError.wrap(() -> channel.getHistory().retrievePast(amount)).complete();
 	}
 
 	@FunctionDoc(
@@ -85,7 +85,7 @@ public class DiscordChannelDef extends CreatableDefinition<MessageChannel> {
 	)
 	public Void markTyping(Arguments arguments) {
 		MessageChannel channel = arguments.nextPrimitive(this);
-		channel.sendTyping().complete();
+		RuntimeError.wrap(channel::sendTyping).complete();
 		return null;
 	}
 
@@ -99,7 +99,7 @@ public class DiscordChannelDef extends CreatableDefinition<MessageChannel> {
 	public Object sendMessage(Arguments arguments) {
 		MessageChannel channel = arguments.nextPrimitive(this);
 		String message = arguments.nextPrimitive(StringDef.class);
-		return channel.sendMessage(message).complete();
+		return RuntimeError.wrap(() -> channel.sendMessage(message)).complete();
 	}
 
 	@FunctionDoc(
@@ -124,7 +124,7 @@ public class DiscordChannelDef extends CreatableDefinition<MessageChannel> {
 	public Message sendEmbed(Arguments arguments) {
 		MessageChannel channel = arguments.nextPrimitive(this);
 		ArucasMap embed = arguments.nextPrimitive(MapDef.class);
-		return channel.sendMessageEmbeds(DiscordUtils.parseMapAsEmbed(arguments.getInterpreter(), embed)).complete();
+		return RuntimeError.wrap(() -> channel.sendMessageEmbeds(DiscordUtils.parseMapAsEmbed(arguments.getInterpreter(), embed))).complete();
 	}
 
 	@FunctionDoc(
@@ -137,6 +137,6 @@ public class DiscordChannelDef extends CreatableDefinition<MessageChannel> {
 	public Message sendFile(Arguments arguments) {
 		MessageChannel channel = arguments.nextPrimitive(this);
 		File file = arguments.nextPrimitive(FileDef.class);
-		return channel.sendFiles(FileUpload.fromData(file)).complete();
+		return RuntimeError.wrap(() -> channel.sendFiles(FileUpload.fromData(file))).complete();
 	}
 }

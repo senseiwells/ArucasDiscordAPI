@@ -5,6 +5,7 @@ import me.senseiwells.arucas.api.docs.FunctionDoc;
 import me.senseiwells.arucas.builtin.FileDef;
 import me.senseiwells.arucas.classes.CreatableDefinition;
 import me.senseiwells.arucas.core.Interpreter;
+import me.senseiwells.arucas.exceptions.RuntimeError;
 import me.senseiwells.arucas.utils.Arguments;
 import me.senseiwells.arucas.utils.MemberFunction;
 import me.senseiwells.arucas.utils.Util;
@@ -51,7 +52,7 @@ public class DiscordAttachmentDef extends CreatableDefinition<Message.Attachment
 	public Future<File> saveToFile(Arguments arguments) {
 		Message.Attachment attachment = arguments.nextPrimitive(this);
 		File file = arguments.nextPrimitive(FileDef.class);
-		return attachment.getProxy().downloadToFile(file);
+		return RuntimeError.wrap(() -> attachment.getProxy().downloadToFile(file));
 	}
 
 	@FunctionDoc(

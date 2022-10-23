@@ -7,6 +7,7 @@ import me.senseiwells.arucas.builtin.StringDef;
 import me.senseiwells.arucas.classes.CreatableDefinition;
 import me.senseiwells.arucas.core.Interpreter;
 import me.senseiwells.arucas.discord.DiscordUtils;
+import me.senseiwells.arucas.exceptions.RuntimeError;
 import me.senseiwells.arucas.utils.Arguments;
 import me.senseiwells.arucas.utils.MemberFunction;
 import me.senseiwells.arucas.utils.Util;
@@ -57,7 +58,7 @@ public class DiscordServerDef extends CreatableDefinition<Guild> {
 	public Void ban(Arguments arguments) {
 		Guild guild = arguments.nextPrimitive(this);
 		User user = arguments.nextPrimitive(DiscordUserDef.class);
-		guild.ban(user, 0, TimeUnit.SECONDS).complete();
+		RuntimeError.wrap(() -> guild.ban(user, 0, TimeUnit.SECONDS)).complete();
 		return null;
 	}
 
@@ -71,11 +72,11 @@ public class DiscordServerDef extends CreatableDefinition<Guild> {
 	public boolean kick(Arguments arguments) {
 		Guild guild = arguments.nextPrimitive(this);
 		User user = arguments.nextPrimitive(DiscordUserDef.class);
-		Member member = guild.getMember(user);
+		Member member = RuntimeError.wrap(() -> guild.getMember(user));
 		if (member == null) {
 			return false;
 		}
-		guild.kick(member).complete();
+		RuntimeError.wrap(() -> guild.kick(member)).complete();
 		return true;
 	}
 
@@ -88,7 +89,7 @@ public class DiscordServerDef extends CreatableDefinition<Guild> {
 	public Void unban(Arguments arguments) {
 		Guild guild = arguments.nextPrimitive(this);
 		User user = arguments.nextPrimitive(DiscordUserDef.class);
-		guild.unban(user).complete();
+		RuntimeError.wrap(() -> guild.unban(user)).complete();
 		return null;
 	}
 
@@ -124,7 +125,7 @@ public class DiscordServerDef extends CreatableDefinition<Guild> {
 	public Member getUserFromId(Arguments arguments) {
 		Guild guild = arguments.nextPrimitive(this);
 		String id = arguments.nextPrimitive(StringDef.class);
-		return guild.retrieveMemberById(id).complete();
+		return RuntimeError.wrap(() -> guild.retrieveMemberById(id)).complete();
 	}
 
 	@FunctionDoc(
@@ -149,7 +150,7 @@ public class DiscordServerDef extends CreatableDefinition<Guild> {
 	public Void createRole(Arguments arguments) {
 		Guild guild = arguments.nextPrimitive(this);
 		ArucasMap roleMap = arguments.nextPrimitive(MapDef.class);
-		DiscordUtils.parseMapAsRole(arguments.getInterpreter(), guild.createRole(), roleMap);
+		DiscordUtils.parseMapAsRole(arguments.getInterpreter(), RuntimeError.wrap(guild::createRole), roleMap);
 		return null;
 	}
 }

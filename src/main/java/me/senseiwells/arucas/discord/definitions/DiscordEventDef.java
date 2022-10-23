@@ -123,7 +123,7 @@ public class DiscordEventDef extends CreatableDefinition<GenericEvent> {
 	public Void reply(Arguments arguments) {
 		GenericEvent event = arguments.nextPrimitive(this);
 		String message = arguments.nextPrimitive(StringDef.class);
-		getReplyCallback(event).reply(message).complete();
+		RuntimeError.wrap(() -> getReplyCallback(event).reply(message)).complete();
 		return null;
 	}
 
@@ -148,7 +148,7 @@ public class DiscordEventDef extends CreatableDefinition<GenericEvent> {
 	public Void replyWithEmbed(Arguments arguments) {
 		GenericEvent event = arguments.nextPrimitive(this);
 		ArucasMap map = arguments.nextPrimitive(MapDef.class);
-		getReplyCallback(event).replyEmbeds(DiscordUtils.parseMapAsEmbed(arguments.getInterpreter(), map)).complete();
+		RuntimeError.wrap(() -> getReplyCallback(event).replyEmbeds(DiscordUtils.parseMapAsEmbed(arguments.getInterpreter(), map))).complete();
 		return null;
 	}
 
@@ -161,7 +161,7 @@ public class DiscordEventDef extends CreatableDefinition<GenericEvent> {
 	public Void replyWithFile(Arguments arguments) {
 		GenericEvent event = arguments.nextPrimitive(this);
 		File file = arguments.nextPrimitive(FileDef.class);
-		getReplyCallback(event).replyFiles(FileUpload.fromData(file)).complete();
+		RuntimeError.wrap(() -> getReplyCallback(event).replyFiles(FileUpload.fromData(file))).complete();
 		return null;
 	}
 
