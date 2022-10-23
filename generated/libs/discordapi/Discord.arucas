@@ -1,0 +1,431 @@
+/* Native, implemented in Java
+ * This class lets you download and manipulate discord attachments.
+ * Import with 'import DiscordAttachment from discordapi.Discord'
+ */
+class DiscordAttachment {
+    /*
+     * This allows you to get the file extension of the attachment
+     * Returns - String: the file extension of the attachment
+     */
+    fun getFileExtension(): String;
+
+    /*
+     * This allows you to get the file name of the attachment
+     * Returns - String: the file name of the attachment
+     */
+    fun getFileName(): String;
+
+    /*
+     * This allows you to get the size of the attachment
+     * Returns - Number: the size of the attachment in bytes
+     */
+    fun getSize(): Number;
+
+    /*
+     * This allows you to get the url of the attachment
+     * Returns - String: the url of the attachment
+     */
+    fun getUrl(): String;
+
+    /*
+     * This allows you to check if the attachment is an image
+     * Returns - Boolean: true if the attachment is an image, false otherwise
+     */
+    fun isImage(): Boolean;
+
+    /*
+     * This allows you to check if the attachment is a video
+     * Returns - Boolean: true if the attachment is a video, false otherwise
+     */
+    fun isVideo(): Boolean;
+
+    /*
+     * This allows you to save an attachment to a file
+     * Parameter - File (file): the file you want to save the attachment to
+     * Returns - Future: the future that will complete when the file has been downloaded
+     */
+    fun saveToFile(file: File): Future;
+}
+
+/* Native, implemented in Java
+ * This class lets you create a Discord bot and interact with it.
+ * Import with 'import DiscordBot from discordapi.Discord'
+ */
+class DiscordBot {
+    /*
+     * This creates a new DiscordBot instance
+     * Parameter - String (token): The token of the bot
+     */
+    DiscordBot(token: String);
+
+    /*
+     * This adds a slash command to the bot
+     * Each command must have a name and description, it can have a command, define the next subcommand with 'next'
+     * and subcommands must have the argument type, and can have whether it is required or not
+     * types: 'string', 'integer', 'number', 'boolean', 'user', 'channel', and 'attachment'
+     * Parameter - Map (commandMap): the command map
+     */
+    fun addCommand(commandMap: Map): Null;
+
+    /*
+     * This gets the activity of the bot
+     * Returns - String: The activity of the bot, null if no activity
+     */
+    fun getActivity(): String;
+
+    /*
+     * This gets a channel by its id
+     * Parameter - String (channelId): the id of the channel
+     * Returns - DiscordChannel: the channel
+     */
+    fun getChannel(channelId: String): DiscordChannel;
+
+    /*
+     * This gets a server by its id
+     * Parameter - String (serverId): the id of the server
+     * Returns - DiscordServer: the server
+     */
+    fun getServer(serverId: String): DiscordServer;
+
+    /*
+     * This gets the status of the bot
+     * Returns - String: The status of the bot
+     */
+    fun getStatus(): String;
+
+    /*
+     * This gets the user id of the bot
+     * Returns - String: The user id of the bot
+     */
+    fun getUserId(): String;
+
+    /*
+     * This registers a function to be called when an event is triggered
+     * Parameter - String (eventName): the name of the event
+     * Parameter - Function (function): the function to be called
+     */
+    fun registerEvent(eventName: String, function: Function): Null;
+
+    /*
+     * This removes a slash command from the bot
+     * Parameter - String (commandName): the name of the command
+     */
+    fun removeCommand(commandName: String): Null;
+
+    /*
+     * This sets the activity of the bot
+     * Parameter - String (activity): The activity you want the bot to have
+     * Parameter - String (message): The message you want to display
+     */
+    fun setActivity(activity: String, message: String): Null;
+
+    /*
+     * This sets the status of the bot
+     * Parameter - String (status): The status you want the bot to have
+     */
+    fun setStatus(status: String): Null;
+
+    /*
+     * This stops the bot
+     */
+    fun stop(): Null;
+}
+
+/* Native, implemented in Java
+ * This class allows you to get and send messages in the channel
+ * Import with 'import DiscordChannel from discordapi.Discord'
+ */
+class DiscordChannel {
+    /*
+     * This gets the last X messages
+     * Parameter - Number (amount): the amount of messages to get
+     * Returns - List: the messages
+     */
+    fun getHistory(amount: Number): List;
+
+    /*
+     * This gets a message by its id
+     * Parameter - String (messageId): the id of the message
+     * Returns - DiscordMessage: the message
+     */
+    fun getMessageFromId(messageId: String): DiscordMessage;
+
+    /*
+     * This marks the bot as typing in this channel, it lasts 10 seconds or until the message is sent
+     */
+    fun markTyping(): Null;
+
+    /*
+     * This sends an embed to this channel.
+     * In the embed map, you can use the following keys:
+     * 'title' as String, ''description' as String or List of String, 'colour'/'color' as Number
+     * 'fields' as Map with keys: ('name' as String, 'value' as String, 'inline' as Boolean)
+     * and 'image' as String that is an url
+     * Parameter - Map (embedMap): the embed map
+     * Returns - DiscordMessage: the message that was sent
+     */
+    fun sendEmbed(embedMap: Map): DiscordMessage;
+
+    /*
+     * This sends a file to this channel
+     * Parameter - File (file): the file you want to send
+     * Returns - DiscordMessage: the message that was sent
+     */
+    fun sendFile(file: File): DiscordMessage;
+
+    /*
+     * This sends a message to this channel
+     * Parameter - String (message): the message
+     * Returns - DiscordMessage: the message that was sent
+     */
+    fun sendMessage(message: String): DiscordMessage;
+}
+
+/* Native, implemented in Java
+ * This class is an event wrapper that you can use to access event parameters.
+ * Import with 'import DiscordEvent from discordapi.Discord'
+ */
+class DiscordEvent {
+    /*
+     * This gets the channel that is related to the event
+     * Returns - DiscordChannel: the channel
+     */
+    fun getChannel(): DiscordChannel;
+
+    /*
+     * This gets the name of the event
+     * Returns - String: the name of the event
+     */
+    fun getEventName(): String;
+
+    /*
+     * This gets the message that is related to the event
+     * Returns - DiscordMessage: the message
+     */
+    fun getMessage(): DiscordMessage;
+
+    /*
+     * This gets the server that is related to the event
+     * Returns - DiscordServer: the server
+     */
+    fun getServer(): DiscordServer;
+
+    /*
+     * This gets the user that is related to the event
+     * Returns - DiscordUser: the user
+     */
+    fun getUser(): DiscordUser;
+
+    /*
+     * This replies to the event with the given message
+     * Parameter - String (message): the message
+     */
+    fun reply(message: String): Null;
+
+    /*
+     * This replies to the event with the given embed map
+     * In the embed map, you can use the following keys:
+     * 'title' as String, ''description' as String or List of String, 'colour'/'color' as Number
+     * 'fields' as Map with keys: ('name' as String, 'value' as String, 'inline' as Boolean)
+     * and 'image' as String that is an url
+     * Parameter - Map (embedMap): the embed map
+     */
+    fun replyWithEmbed(embedMap: Map): Null;
+
+    /*
+     * This replies to the event with the given file
+     * Parameter - File (file): the file
+     */
+    fun replyWithFile(file: File): Null;
+}
+
+/* Native, implemented in Java
+ * This class allows you to interact with Discord messages.
+ * Import with 'import DiscordMessage from discordapi.Discord'
+ */
+class DiscordMessage {
+    /*
+     * This adds a reaction to the message with a specific emoji id
+     * Parameter - String (emojiId): the emoji id
+     */
+    fun addReaction(emojiId: String): Null;
+
+    /*
+     * This adds a reaction to the message with a specific unicode
+     * Parameter - String (unicode): the unicode character
+     */
+    fun addReactionUnicode(unicode: String): Null;
+
+    /*
+     * This deletes the message
+     */
+    fun delete(): Null;
+
+    /*
+     * This gets the attachments of the message
+     * Returns - List: List with the attachments of the message
+     */
+    fun getAttachments(): List;
+
+    /*
+     * This gets the author of the message
+     * Returns - DiscordUser: The author of the message
+     */
+    fun getAuthor(): DiscordUser;
+
+    /*
+     * This gets the channel the message was sent in
+     * Returns - DiscordChannel: The channel the message was sent in
+     */
+    fun getChannel(): DiscordChannel;
+
+    /*
+     * This gets the id of the message
+     * Returns - String: The id of the message
+     */
+    fun getId(): String;
+
+    /*
+     * This gets the raw message content
+     * Returns - String: The raw message content
+     */
+    fun getRaw(): String;
+
+    /*
+     * This gets the server the message was sent in
+     * Returns - DiscordServer: The server the message was sent in
+     */
+    fun getServer(): DiscordServer;
+
+    /*
+     * This checks if the message is edited
+     * Returns - Boolean: true if the message is edited, false if not
+     */
+    fun isEdited(): Boolean;
+
+    /*
+     * This checks if the message is pinned
+     * Returns - Boolean: true if the message is pinned, false if not
+     */
+    fun isPinned(): Boolean;
+
+    /*
+     * This pins the message if true, and removes if false
+     * Parameter - Boolean (bool): true to pin, false to unpin
+     */
+    fun pin(bool: Boolean): Null;
+
+    /*
+     * This removes all reactions from the message
+     */
+    fun removeAllReactions(): Null;
+
+    /*
+     * This replies to the message with the given message
+     * Parameter - String (message): the message
+     * Returns - DiscordMessage: the message that was sent
+     */
+    fun reply(message: String): DiscordMessage;
+
+    /*
+     * This replies to the message with the given embed map
+     * In the embed map, you can use the following keys:
+     * 'title' as String, ''description' as String or List of String, 'colour'/'color' as Number
+     * 'fields' as Map with keys: ('name' as String, 'value' as String, 'inline' as Boolean)
+     * and 'image' as String that is an url
+     * Parameter - Map (embedMap): the embed map
+     * Returns - DiscordMessage: the message that was sent
+     */
+    fun replyWithEmbed(embedMap: Map): DiscordMessage;
+
+    /*
+     * This replies to the message with the given file
+     * Parameter - File (file): the file
+     * Returns - DiscordMessage: the message that was sent
+     */
+    fun replyWithFile(file: File): DiscordMessage;
+}
+
+/* Native, implemented in Java
+ * This class allows you to interact with Discord servers.
+ * Import with 'import DiscordServer from discordapi.Discord'
+ */
+class DiscordServer {
+    /*
+     * This bans a user from the server
+     * Parameter - DiscordUser (user): the user to ban
+     */
+    fun ban(user: DiscordUser): Null;
+
+    /*
+     * This creates a role in the server
+     * In the role map you can have the following keys:
+     * 'name' as String, 'colour'/'color' as Number, 'hoisted' as Boolean, 'mentionable as Boolean'
+     * and 'permissions' as a List of Strings, for example ['Manage Channels', 'Manage Server'], see Discord for more
+     * Parameter - Map (roleMap): the map of the role
+     */
+    fun createRole(roleMap: Map): Null;
+
+    /*
+     * This gets the amount of members in the server
+     * Returns - Number: the amount of members
+     */
+    fun getMemberCount(): Number;
+
+    /*
+     * This gets the id of the owner of the server
+     * Returns - String: the id of the owner
+     */
+    fun getOwnerId(): String;
+
+    /*
+     * This gets a user from the server by their id
+     * Parameter - String (userId): the id of the user
+     * Returns - DiscordUser: the user, if the user cannot be found returns null
+     */
+    fun getUserFromId(userId: String): DiscordUser;
+
+    /*
+     * This kicks a user from the server
+     * Parameter - DiscordUser (user): the user to kick
+     * Returns - Boolean: whether the kick was successful
+     */
+    fun kick(user: DiscordUser): Boolean;
+
+    /*
+     * This unbans a user from the server
+     * Parameter - DiscordUser (user): the user to unban
+     */
+    fun unban(user: DiscordUser): Null;
+}
+
+/* Native, implemented in Java
+ * This class is used to interact with Discord users.
+ * Import with 'import DiscordUser from discordapi.Discord'
+ */
+class DiscordUser {
+    /*
+     * This gets the id of the user
+     * Returns - String: The id of the user
+     */
+    fun getId(): String;
+
+    /*
+     * This gets the name of the user
+     * Returns - String: The name of the user
+     */
+    fun getName(): String;
+
+    /*
+     * This gets the name and tag of the user
+     * Returns - String: The name and tag of the user
+     */
+    fun getNameAndTag(): String;
+
+    /*
+     * This gets the tag of the user, the numbers after the #
+     * Returns - String: The tag of the user
+     */
+    fun getTag(): String;
+}
+

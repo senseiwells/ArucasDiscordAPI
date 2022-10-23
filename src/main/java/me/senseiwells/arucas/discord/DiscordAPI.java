@@ -1,6 +1,8 @@
 package me.senseiwells.arucas.discord;
 
 import me.senseiwells.arucas.api.ArucasAPI;
+import me.senseiwells.arucas.api.docs.parser.DocParser;
+import me.senseiwells.arucas.core.Arucas;
 import me.senseiwells.arucas.discord.definitions.*;
 import me.senseiwells.arucas.discord.impl.DiscordBot;
 import net.dv8tion.jda.api.JDA;
@@ -9,6 +11,8 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.GenericEvent;
+
+import java.nio.file.Path;
 
 public class DiscordAPI {
 	public static final String
@@ -40,5 +44,12 @@ public class DiscordAPI {
 		builder.addConversion(Message.class, (m, i) -> i.create(DiscordMessageDef.class, m));
 		builder.addConversion(Guild.class, (g, i) -> i.create(DiscordServerDef.class, g));
 		builder.addConversion(User.class, (u, i) -> i.create(DiscordUserDef.class, u));
+	}
+
+	public static void main(String[] args) {
+		ArucasAPI.Builder builder = new ArucasAPI.Builder();
+		builder.addDefault();
+		addDiscordAPI(builder);
+		DocParser.generateAll(Path.of("generated"), builder.build());
 	}
 }
